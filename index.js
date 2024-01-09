@@ -4,6 +4,8 @@ const dotenv=require('dotenv')
 const cors=require('cors')
 const bodyparser=require('body-parser')
 const app1 = require('./routing/userRouters')
+const { Connection } = require('./dbConnection/dbConnection')
+// const { Connection } = require('mongoose')
 
 // dotenv.config()
 const port=4000
@@ -20,6 +22,12 @@ app.get("/",(req,res)=>{
 
 app.use(app1)
 
-app.listen(port,()=>{
-    console.log("server is running fine");
+app.listen(port,async()=>{
+    try{
+        await Connection()
+        console.log("server is running with",port)
+    }
+    catch(error){
+        console.log(error)
+    }
 })

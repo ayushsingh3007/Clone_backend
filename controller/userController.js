@@ -5,6 +5,7 @@ const cors=require('cors');
 const { reg } = require('../Schemafolders/userSchema');
 const { course } = require('../Schemafolders/courseSchema');
 const { str } = require('../Schemafolders/backendSchema');
+const pastmock=require('../controller/data.js')
 const saltround=10;
 const secretkey="cloneproject"
 
@@ -46,7 +47,7 @@ const registerController=async(req,res)=>{
             console.log(user.password)
             const createuser= await reg.create(user)
             console.log(createuser)
-            const token=jwt.sign({user:user.email}.secretkey,{expiresIn:'300000'})
+            const token=jwt.sign({user:user.email},secretkey,{expiresIn:'300000'})
             console.log(token)
             return res.send({msg:"user registerd successfully",token:token})
         }
@@ -70,7 +71,7 @@ const loginController=async(req,res)=>{
         console.log(comparedetails)
 
        if(comparedetails){
-        const token=jwt.sign({email:loginuser.email})
+        const token = jwt.sign({ email: loginuser.email }, secretkey);
         console.log(token);
         return res.send({msg:"login successfully"})
        }
@@ -112,47 +113,47 @@ const auth=async (req,res)=>{
 }
 
 
-const successpage = `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-        }
-        h1 {
-            color: blue;
-            margin-left:25%;
-        }
-        .cont{
-            display:flex;
-            align-items:center;
-            flex-direction:column;
-            border:2px;
+// const successpage = `
+// <!DOCTYPE html>
+// <html lang="en">
+// <head>
+//     <meta charset="UTF-8">
+//     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+//     <style>
+//         body {
+//             font-family: Arial, sans-serif;
+//             background-color: #f0f0f0;
+//         }
+//         h1 {
+//             color: blue;
+//             margin-left:25%;
+//         }
+//         .cont{
+//             display:flex;
+//             align-items:center;
+//             flex-direction:column;
+//             border:2px;
             
-        }
-       button{
+//         }
+//        button{
             
-            margin-left:46%;
-       }
-    </style>
-    <title>payment</title>
-</head>
-<body>
-<div className="cont">
-<div>
-    <h1>Payment successfull and order confirmed</h1>
-    <div>
-    // <a href="https://moonlit-cranachan-da39c6.netlify.app/">
-     <button className=" bot1"><NavLink to="/">continue your shopping</NavLink></button>
-    </div>
-    </div>
-    </body>
-</html>
-`;
+//             margin-left:46%;
+//        }
+//     </style>
+//     <title>payment</title>
+// </head>
+// <body>
+// <div className="cont">
+// <div>
+//     <h1>Payment successfull and order confirmed</h1>
+//     <div>
+//     // <a href="https://moonlit-cranachan-da39c6.netlify.app/">
+//      <button className=" bot1"><NavLink to="/">continue your shopping</NavLink></button>
+//     </div>
+//     </div>
+//     </body>
+// </html>
+// `;
 const createcheckout= async (req, res) => {
     console.log("hiiiii")
   const  {products}  = await req.body;
