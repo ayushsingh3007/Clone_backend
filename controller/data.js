@@ -453,6 +453,7 @@ const pastmock=[
 { 
      
     id:34,
+    
     catdivd:"companytests",
     course_name:"virtusa", 
     img:"https://s3.ap-south-1.amazonaws.com/www.prepbytes.com/images/mock-test/company/virtusa.svg",

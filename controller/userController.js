@@ -2,12 +2,15 @@ const bcrypt=require('bcrypt')
 const jwt=require('jsonwebtoken')
 
 const cors=require('cors');
-const { reg } = require('../Schemafolders/userSchema');
+
 const { course } = require('../Schemafolders/courseSchema');
 const { str } = require('../Schemafolders/backendSchema');
-const pastmock=require('../controller/data.js')
+const pastmock=require('../controller/data.js');
+const { reg } = require('../Schemafolders/UserSchema.js');
 const saltround=10;
 const secretkey="cloneproject"
+const stripe=require("stripe")("sk_test_51OK7daSAg3lXy8qLZhheRgo3J3APhi6R52IAFx3uP0NwcRhA5MXL1WkNx9p73iwoMSHmNRsEJ6LyVwnhkcrQYGIB00X6Jf63tM")
+
 
 let course1=""
 const prepcourses=async (req,res)=>{
@@ -73,7 +76,10 @@ const loginController=async(req,res)=>{
        if(comparedetails){
         const token = jwt.sign({ email: loginuser.email }, secretkey);
         console.log(token);
-        return res.send({msg:"login successfully"})
+        return res.send({msg:"login successfully", userdetail: { name: verifieduser.name, email: verifieduser.email },          token: token,
+        token: token,
+
+    })
        }
        else{
         return res.send({msg:"incorrect password"})
@@ -113,47 +119,47 @@ const auth=async (req,res)=>{
 }
 
 
-// const successpage = `
-// <!DOCTYPE html>
-// <html lang="en">
-// <head>
-//     <meta charset="UTF-8">
-//     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-//     <style>
-//         body {
-//             font-family: Arial, sans-serif;
-//             background-color: #f0f0f0;
-//         }
-//         h1 {
-//             color: blue;
-//             margin-left:25%;
-//         }
-//         .cont{
-//             display:flex;
-//             align-items:center;
-//             flex-direction:column;
-//             border:2px;
+const successpage = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            color: blue;
+            margin-left:25%;
+        }
+        .cont{
+            display:flex;
+            align-items:center;
+            flex-direction:column;
+            border:2px;
             
-//         }
-//        button{
+        }
+       button{
             
-//             margin-left:46%;
-//        }
-//     </style>
-//     <title>payment</title>
-// </head>
-// <body>
-// <div className="cont">
-// <div>
-//     <h1>Payment successfull and order confirmed</h1>
-//     <div>
-//     // <a href="https://moonlit-cranachan-da39c6.netlify.app/">
-//      <button className=" bot1"><NavLink to="/">continue your shopping</NavLink></button>
-//     </div>
-//     </div>
-//     </body>
-// </html>
-// `;
+            margin-left:46%;
+       }
+    </style>
+    <title>payment</title>
+</head>
+<body>
+<div className="cont">
+<div>
+    <h1>Payment successfull and order confirmed</h1>
+    <div>
+    // <a href="https://moonlit-cranachan-da39c6.netlify.app/">
+     <button className=" bot1"><NavLink to="/">continue your shopping</NavLink></button>
+    </div>
+    </div>
+    </body>
+</html>
+`;
 const createcheckout= async (req, res) => {
     console.log("hiiiii")
   const  {products}  = await req.body;
@@ -166,8 +172,8 @@ const createcheckout= async (req, res) => {
             email:prod1.email,
             id:prod1.id,
             catdivd:prod1.catdivd,
-            course_name:prod1.nameofthecourse,
-            img:prod1.imgsrc,
+            course_name:prod1.course_name,
+            img:prod1.img,
             date:prod1.date,
             cat1:prod1.cat1,
             participants:prod1.participants,
@@ -187,7 +193,7 @@ const lineItems = products.map((prod) => ({
         product_data: {
             name: prod.course_name,
         },
-        unit_amount: prod.price,
+        unit_amount: prod.price*100,
     },
     quantity: 1,
 }));
@@ -200,8 +206,8 @@ const lineItems = products.map((prod) => ({
       line_items: lineItems,
       mode: "payment",
       
-      success_url: "https://prepbytesclonebackend.onrender.com/Success",
-      cancel_url: "https://prepbytesclonebackend.onrender.com/Cancel",
+      success_url: "http://localhost:3000/success",
+      cancel_url: "http://localhost:3000/",
     });
 
     res.json({ id: session.id });
