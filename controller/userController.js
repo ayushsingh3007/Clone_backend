@@ -119,47 +119,7 @@ const auth=async (req,res)=>{
 }
 
 
-const successpage = `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-        }
-        h1 {
-            color: blue;
-            margin-left:25%;
-        }
-        .cont{
-            display:flex;
-            align-items:center;
-            flex-direction:column;
-            border:2px;
-            
-        }
-       button{
-            
-            margin-left:46%;
-       }
-    </style>
-    <title>payment</title>
-</head>
-<body>
-<div className="cont">
-<div>
-    <h1>Payment successfull and order confirmed</h1>
-    <div>
-    // <a href="https://moonlit-cranachan-da39c6.netlify.app/">
-     <button className=" bot1"><NavLink to="/">continue your shopping</NavLink></button>
-    </div>
-    </div>
-    </body>
-</html>
-`;
+
 const createcheckout= async (req, res) => {
     console.log("hiiiii")
   const  {products}  = await req.body;
@@ -218,13 +178,7 @@ const lineItems = products.map((prod) => ({
 };
 
 
-const success=(req,res)=>{
-    return res.send(successpage)
-   
-}
-const cancel=(req,res)=>{
-    return res.send({msg:"cancel"})
-}
+
 
 const buy=async (req,res)=>{
     const buyingcourses=await course.find({})
@@ -236,4 +190,4 @@ const buy=async (req,res)=>{
 
 
 
-module.exports={registerController,loginController,auth,createcheckout,success,cancel,buy,prepcourses,completestore,books}
+module.exports={registerController,loginController,auth,createcheckout,buy,prepcourses,completestore,books}

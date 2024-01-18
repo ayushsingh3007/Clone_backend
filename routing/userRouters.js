@@ -1,5 +1,5 @@
 const express=require('express')
-const { registerController, loginController, prepcourses, completestore, books, auth, createcheckout, success, cancel, buy } = require('../controller/userController')
+const { registerController, loginController, prepcourses, completestore, books, auth, createcheckout, buy } = require('../controller/userController')
  const app1=express.Router()
 
  app1.post("/register",registerController)
@@ -9,8 +9,7 @@ const { registerController, loginController, prepcourses, completestore, books, 
  app1.post("/books",books)
  app1.get("/course",prepcourses)
  app1.get("/auth",auth)
- app1.get("/sucess",success)
- app1.get("/cancel",cancel)
+ 
  app1.get("/buy",buy)
 
 
