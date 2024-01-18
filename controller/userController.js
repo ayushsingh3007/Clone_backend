@@ -181,7 +181,7 @@ const lineItems = products.map((prod) => ({
 
 
 const buy=async (req,res)=>{
-    const buyingcourses=await course.find({})
+    const buyingcourses=await  course.find({})
     console.log(buyingcourses)
     
     return res.send(buyingcourses)
