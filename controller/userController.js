@@ -15,7 +15,7 @@ const stripe=require("stripe")("sk_test_51OK7daSAg3lXy8qLZhheRgo3J3APhi6R52IAFx3
 let course1=""
 const prepcourses=async (req,res)=>{
     for(let i=0;i<pastmock.length;i++){
-        let usercourse=await str.create(pastmock[i])
+        let usercourse=await course.create(pastmock[i])
     }
     return res.send('course has been created successfully')
 }
