@@ -10,9 +10,7 @@ const { Connection } = require('./dbConnection/dbConnection')
 // dotenv.config()
 const port=4000
 
-app.use(cors({
-    origin:"*"
-}))
+app.use(cors())
 app.use(bodyparser.urlencoded({ extended: false }));
 app.use(bodyparser.json());
 app.get("/",(req,res)=>{
