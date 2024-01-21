@@ -1,7 +1,7 @@
 const bcrypt=require('bcrypt')
 const jwt=require('jsonwebtoken')
 
-const cors=require('cors');
+
 
 const { course } = require('../Schemafolders/courseSchema');
 const { str } = require('../Schemafolders/backendSchema');
