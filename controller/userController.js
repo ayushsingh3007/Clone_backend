@@ -36,6 +36,8 @@ const books=async(req,res)=>{
 
 
 
+
+
 ////registration controller here 
 const registerController=async(req,res)=>{
     const user=req.body
@@ -59,6 +61,9 @@ const registerController=async(req,res)=>{
         console.log(error)
     }
 }
+
+
+
 
 const loginController=async(req,res)=>{
       const loginuser=await req.body
