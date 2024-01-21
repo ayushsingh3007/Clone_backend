@@ -1,6 +1,6 @@
 const express=require('express')
 const app=express()
-const dotenv=require('dotenv')
+
 const cors=require('cors')
 const bodyparser=require('body-parser')
 const app1 = require('./routing/userRouters')
