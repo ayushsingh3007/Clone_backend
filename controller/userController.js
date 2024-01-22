@@ -1,11 +1,11 @@
 const bcrypt = require("bcrypt");
 
 const jwt=require("jsonwebtoken");
-const { reg } = require("../schemamodel/registermodel");
+const {reg}=require('../Schemafolders/userSchema')
 const {course}=require('../Schemafolders/courseSchema')
 const {str}=require('../Schemafolders/backendSchema')
 
-const pastmock=require('../routing/data')
+const pastmock=require('../controller/data')
 
 
 
