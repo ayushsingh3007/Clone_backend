@@ -5,7 +5,7 @@ const cors=require('cors')
 const bodyparser=require('body-parser')
 const app1 = require('./routing/userRouters')
 const { Connection } = require('./dbConnection/dbConnection')
-// const { Connection } = require('mongoose')
+
 
 dotenv.config()
 const port=process.env.PORT

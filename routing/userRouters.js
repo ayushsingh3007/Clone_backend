@@ -1,12 +1,13 @@
 const express=require('express')
-const { registerController, loginController, prepcourses, completestore, books, auth, createcheckout, buy } = require('../controller/userController')
+const { registerController, loginController, prepcourses, completestore, auth, createcheckout, buy } = require('../controller/userController')
+const auther = require('../autherfolder/authentic')
  const app1=express.Router()
 
  app1.post("/register",registerController)
  app1.post("/login",loginController)
  app1.post("/storecourse",completestore)
  app1.post("/createCheckout",createcheckout)
- app1.post("/books",books)
+//  app1.post("/books",books)
  app1.get("/course",prepcourses)
  app1.get("/auth",auth)
  
