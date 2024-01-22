@@ -1,6 +1,6 @@
 const express=require('express')
 const { registerController, loginController, prepcourses, completestore, auth, createcheckout, buy } = require('../controller/userController')
-const auther = require('../autherfolder/authentic')
+
  const app1=express.Router()
 
  app1.post("/register",registerController)

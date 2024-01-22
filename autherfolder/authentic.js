@@ -20,7 +20,7 @@ const auther=(req,res,next)=>{
     }
     }
     catch(error){
-        console.log({msg:error})
+        console.log(error)
     }
 }
 else{
