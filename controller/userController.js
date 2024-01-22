@@ -5,7 +5,7 @@ const { reg } = require("../schemamodel/registermodel");
 const {course}=require('../Schemafolders/courseSchema')
 const {str}=require('../Schemafolders/backendSchema')
 
-const pastmock=require("./alldata");
+const pastmock=require('../routing/data')
 
 
 
@@ -189,7 +189,7 @@ const createcheckout= async (req, res) => {
   const  {products}  = await req.body;
 //   const num=parseInt(products)
 //   const specificdata=arr.filter((item)=>{item.id==num})
-  console.log(products,"-------------------------------");
+  console.log(products);
   console.log(typeof(products))
 
 //   course1={useremail:mailid,
