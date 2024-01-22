@@ -1,30 +1,35 @@
-const bcrypt=require('bcrypt')
-const jwt=require('jsonwebtoken')
+const bcrypt = require("bcrypt");
+
+const jwt=require("jsonwebtoken");
+const { reg } = require("../schemamodel/registermodel");
+const {course}=require('../Schemafolders/courseSchema')
+const {str}=require('../Schemafolders/backendSchema')
+
+const pastmock=require("./alldata");
 
 
 
-const { course } = require('../Schemafolders/courseSchema');
-const { str } = require('../Schemafolders/backendSchema');
-const pastmock=require('../controller/data.js');
-const { reg } = require('../Schemafolders/UserSchema.js');
+const stripe=require("stripe")("sk_test_51OMERySJb30zHYKXRtntVAOMPx8ClokJnGOlIPN1IBbaP06OUAf0e4jFlBPAnUsEPy6uK7zORnT48RFKNRH14DC2002ZAtE6HX")
 const saltround=10;
 const secretkey="cloneproject"
-const stripe=require("stripe")("sk_test_51OK7daSAg3lXy8qLZhheRgo3J3APhi6R52IAFx3uP0NwcRhA5MXL1WkNx9p73iwoMSHmNRsEJ6LyVwnhkcrQYGIB00X6Jf63tM")
-
 
 let course1=""
-const prepcourses=async (req,res)=>{
+
+
+
+const prepcourses= (req,res)=>{
     for(let i=0;i<pastmock.length;i++){
-        let usercourse=await course.create(pastmock[i])
+        let rt=await .create(pastmock[i])
+
     }
-    return res.send('course has been created successfully')
+    return res.send("successfully stored")
+
 }
 
-const completestore=async(req,res)=>{
+const completestore= async(req,res)=>{
     let arr1=await str.find({})
     return res.send(arr1)
 }
-
 
 const books=async(req,res)=>{
     return res.send(arr)
@@ -32,113 +37,174 @@ const books=async(req,res)=>{
 
 
 
-
-
-
-
-
-
-////registration controller here 
-const registerController=async(req,res)=>{
-    const user=req.body
+const registerController=async (req,res)=>{
+    const user=req.body;
     try{
-        const findemail=await reg.findOne({email:{$eq:user.email}})
-        if(findemail){
-            console.log('user already registered ')
-            return res.send({msg:"user already exists"})
-        }
-        else{
-            user.password=bcrypt.hashSync(user.password,saltround)
-            console.log(user.password)
-            const createuser= await reg.create(user)
-            console.log(createuser)
-            const token=jwt.sign({user:user.email},secretkey,{expiresIn:'300000'})
-            console.log(token)
-            return res.send({msg:"user registerd successfully",token:token})
-        }
-    }
-    catch(error){
-        console.log(error)
-    }
-}
-
-
-
-
-const loginController=async(req,res)=>{
-      const loginuser=await req.body
-      try{
-        console.log(loginuser)
-         
-        const verifieduser=await reg.findOne({email:{$eq:loginuser.email}})
-        console.log(verifieduser);
-        if(verifieduser){
-            course1=loginuser.email
-            console.log(course1);
-        let comparedetails=bcrypt.compareSync(loginuser.password,verifieduser.password)
-        console.log(comparedetails)
-
-       if(comparedetails){
-        const token = jwt.sign({ email: loginuser.email }, secretkey);
-        console.log(token);
-        return res.send({msg:"login successfully", userdetail: { name: verifieduser.name, email: verifieduser.email },          token: token,
-        token: token,
-
-    })
-       }
-       else{
-        return res.send({msg:"incorrect password"})
-       }
-
-
+    const samemail=await reg.findOne({email:{$eq:user.email}})
+    if(samemail){
+        console.log({msg:"email already exists"})
+        return res.send({msg:"email already exists"})
     }
     else{
-        return res.send({msg:"try to login first"})
+        // const gen=bcrypt.genSaltSync(saltround)
+        user.password=bcrypt.hashSync(user.password,saltround)
+        console.log(user.password)
+        const dbres1=await reg.create(user)
+        console.log(dbres1)
+        const token= jwt.sign({user:user.email},secretkey,{expiresIn:'300000'})
+        console.log(token)
+        // arr.push(user)
+        
+        return res.send({msg:"user successfully registered",token:token})
     }
-      }
-      catch(err){
-        console.log(err);
-      }
-
+    
+}
+catch(error){
+    console.log(error)
+}
 }
 
 
 
-const auth=async (req,res)=>{
-    const user=req.user;
-    if(user && user.email){
-        try{
-            const userinfo=await reg.findOne({email:user.email})
-            if(userinfo){
-                res.send({msg:"USER AUTHORIZED",userdata:userinfo})
-            }
+const loginController=async (req,res)=>{
+    const logindetails= await req.body;
+
+    try{    
+        console.log(logindetails,"----------1111")
+    
+        const validmaildetails= await reg.findOne({email:{$eq:logindetails.email}})
+        console.log(validmaildetails,"----------")
+        if(validmaildetails){
+            // console.log({msg:"email already exists"}) 
+            course1=logindetails.email
+            console.log(course1)
+            
+    
+            const comparedetails= bcrypt.compareSync(logindetails.password,validmaildetails.password)
+        
+            console.log(comparedetails)
+            if(comparedetails)
+
+                {
+                    const token = jwt.sign({ email: logindetails.email }, secretkey, { expiresIn: "360000" });
+                    console.log("token:", token);
+                    return res.send({ msg: "your login successfully", token: token, userdetail: validmaildetails });
+        
+            // return res.send({msg:"your login successfully"})
+                }
             else{
-                res.status(404).send("user not found")
+                return res.send({msg:"your password is wrong"})
             }
         }
-        catch(err){
-            console.log(err)
+    
+        else{
+            return res.send({msg:"first you have to register or check your credentials"})
+
         }
-    }
-    console.log("user authorized");
+}
+catch(error){
+    return res.send({msg:error})
+} 
 }
 
 
 
+const auth=async (req, res) => {
+    const user = req.user;
+    console.log(user);
+    if (user && user.email) {
+        try {
+            const userinfo = await reg.findOne({ email: user.email });
+            if (userinfo) {
+                res.send({ msg: "User Authorized", userdata: userinfo })
+            }
+            else {
+                res.status(404).send("User not found");
+            }
+        }
+        catch (err) {
+            console.log("Error fetching user detail from db:", err);
+        }
+    }
+   console.log("user authorized")
+   
+}
+
+
+// router1.get("/mobdata",async (req,res)=>{
+    
+   
+//     const dbres4=await dumy.find({})
+//     console.log(dbres4)
+    
+//     return res.send(dbres4)
+// })
+
+// const htmlsuccesspage = `
+// <!DOCTYPE html>
+// <html lang="en">
+// <head>
+//     <meta charset="UTF-8">
+//     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+//     <style>
+//         body {
+//             font-family: Arial, sans-serif;
+//             background-color: #f0f0f0;
+//         }
+//         h1 {
+//             color: blue;
+//             margin-left:15%;
+//             margin-bottom:30px;
+            
+//         }
+//         .cont{
+//             display:flex;
+//             align-items:center;
+//             flex-direction:column;
+//             border:2px;
+            
+//         }
+//        button{
+            
+//             margin:40%;
+//             margin-top:30px;
+//        }
+//     </style>
+//     <title>payment</title>
+// </head>
+// <body>
+// <div className="cont">
+// <div>
+//     <h1>Payment successfull and course confirmed</h1>
+//     <div>
+//     // <a href="https://moonlit-cranachan-da39c6.netlify.app/">
+//      <button className=" bot1"><NavLink to="/">continue with your course</NavLink></button>
+//     </div>
+//     </div>
+//     </body>
+// </html>
+// `;
 const createcheckout= async (req, res) => {
     console.log("hiiiii")
   const  {products}  = await req.body;
-
-  console.log(products);
+//   const num=parseInt(products)
+//   const specificdata=arr.filter((item)=>{item.id==num})
+  console.log(products,"-------------------------------");
   console.log(typeof(products))
 
-
+//   course1={useremail:mailid,
+//             bookname:specificdata.bookname,
+//             price:specificdata.price
+//         }
+//     const ressee=coursestr.create(course1)
+//     console.log(ressee)
+    //const dbres1=await reg.create(user)
     const storeitem=products.map((prod1)=>({
-            email:prod1.email,
+            useremail:prod1.email,
             id:prod1.id,
             catdivd:prod1.catdivd,
-            course_name:prod1.course_name,
-            img:prod1.img,
+            nameofthecourse:prod1.course_name,
+            imgsrc:prod1.img,
             date:prod1.date,
             cat1:prod1.cat1,
             participants:prod1.participants,
@@ -158,7 +224,7 @@ const lineItems = products.map((prod) => ({
         product_data: {
             name: prod.course_name,
         },
-        unit_amount: prod.price*100,
+        unit_amount: prod.price,
     },
     quantity: 1,
 }));
@@ -171,8 +237,8 @@ const lineItems = products.map((prod) => ({
       line_items: lineItems,
       mode: "payment",
       
-      success_url: "http://localhost:3000/success",
-      cancel_url: "http://localhost:3000/",
+      success_url: "https://prepbytesclonebackend.onrender.com/Success",
+      cancel_url: "https://prepbytesclonebackend.onrender.com/Cancel",
     });
 
     res.json({ id: session.id });
@@ -183,16 +249,17 @@ const lineItems = products.map((prod) => ({
 };
 
 
-
+// router1.get("/Success",(req,res)=>{
+//     return res.send(htmlsuccesspage)
+   
+// })
 
 const buy=async (req,res)=>{
-    const buyingcourses=await  course.find({})
+    const buyingcourses=await course.find({email:{$eq:course1}})
     console.log(buyingcourses)
     
     return res.send(buyingcourses)
 }
-
-
 
 
 module.exports={registerController,loginController,auth,createcheckout,buy,prepcourses,completestore,books}
