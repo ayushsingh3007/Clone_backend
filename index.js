@@ -13,7 +13,7 @@ const port=4000
 app.use(cors({
     origin:"*"
 }))
-app.use(bodyparser.urlencoded({ extended: false }));
+// app.use(bodyparser.urlencoded({ extended: false }));
 app.use(bodyparser.json());
 app.get("/",(req,res)=>{
     return res.send("homepage")
