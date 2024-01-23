@@ -1,33 +1,30 @@
-const express=require('express')
-const app=express()
-const dotenv=require('dotenv')
-const cors=require('cors')
-const bodyparser=require('body-parser')
-const app1 = require('./routing/userRouters')
-const { Connection } = require('./dbConnection/dbConnection')
-
-
-dotenv.config()
+const express=require("express")
+const dotenv=require("dotenv")
+const stripe=require("stripe")("sk_test_51OK7daSAg3lXy8qLZhheRgo3J3APhi6R52IAFx3uP0NwcRhA5MXL1WkNx9p73iwoMSHmNRsEJ6LyVwnhkcrQYGIB00X6Jf63tM")
+const cors=require("cors");
+const bodyParser=require("body-parser")
+const { Connection } = require("./Dbconnection/connection");
+const router1 = require("./userControl/regloginrouter");
 const port=4000
-
+//dotenv.config()
+const app=express();
 app.use(cors({
     origin:"*"
 }))
-// app.use(bodyparser.urlencoded({ extended: false }));
-app.use(bodyparser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
 app.get("/",(req,res)=>{
     return res.send("homepage")
 })
-
-
-app.use(app1)
-
-app.listen(port,async()=>{
+app.use(router1)
+app.listen(port, async ()=>{
     try{
-        await Connection()
+        await Connection();
         console.log("server is running with",port)
     }
     catch(error){
         console.log(error)
     }
+
 })
