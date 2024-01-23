@@ -8,7 +8,7 @@ const { Connection } = require('./dbConnection/dbConnection')
 
 
 dotenv.config()
-const port=process.env.PORT
+const port=4000
 
 app.use(cors({
     origin:"*"
